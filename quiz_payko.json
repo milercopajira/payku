@@ -1,0 +1,19 @@
+{
+  "preguntas": [
+    {
+      "pregunta": "¿Qué es el payko?",
+      "opciones": ["Una planta medicinal", "Un instrumento musical", "Una danza tradicional"],
+      "respuesta": "Una planta medicinal"
+    },
+    {
+      "pregunta": "¿Para qué se usa tradicionalmente el payko?",
+      "opciones": ["Para curar heridas y mejorar la digestión", "Para teñir telas", "Para la construcción"],
+      "respuesta": "Para curar heridas y mejorar la digestión"
+    },
+    {
+      "pregunta": "¿Qué parte del payko se utiliza con fines medicinales?",
+      "opciones": ["Las hojas", "La raíz", "La flor"],
+      "respuesta": "Las hojas"
+    }
+  ]
+}

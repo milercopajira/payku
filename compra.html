@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realizar compra</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Formulario de Compra</h1>
+  </header>
+
+  <main class="compra">
+    <form>
+      <label for="nombre">Nombre completo:</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="direccion">Dirección:</label>
+      <input type="text" id="direccion" name="direccion" required>
+
+      <label for="telefono">Teléfono:</label>
+      <input type="tel" id="telefono" name="telefono" required>
+
+      <div class="qr">
+        <h2>Escanee el QR para pagar</h2>
+        <img src="img/qr-pago.png" alt="Código QR de pago">
+      </div>
+
+      <button type="submit" class="btn">Realizar compra</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Encurtidos Tradicionales - Bolivia</p>
+  </footer>
+
+  <script>
+    // Muestra automáticamente el producto y precio según lo elegido en index.html
+    const params = new URLSearchParams(window.location.search);
+    const producto = params.get("producto");
+    const precio = params.get("precio");
+
+    if (producto && precio) {
+      const header = document.querySelector("header h1");
+      header.textContent = `Compra de ${producto} - Bs. ${precio}`;
+    }
+  </script>
+</body>
+</html>

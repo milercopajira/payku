@@ -1,0 +1,115 @@
+/* Estilos generales */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fdfdfd;
+  color: #333;
+}
+
+header {
+  background: #00695c;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+}
+
+footer {
+  background: #004d40;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+/* Estilos para los productos */
+.productos {
+  /* CAMBIO CLAVE 1: Usar 'repeat(2, 1fr)' para forzar 2 columnas en lugar de 'auto-fit' */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 20px;
+  padding: 20px;
+}
+
+.producto {
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.producto img {
+  width: 100%;
+  /* CAMBIO CLAVE 2: Eliminar 'height: 200px' para que la imagen mantenga su proporción. */
+  /* Si aún quieres una altura máxima, puedes usar 'max-height', pero es mejor dejar que 'object-fit' y la proporción natural actúen. */
+  height: auto; /* Se asegura de que la altura se ajuste automáticamente para mantener la proporción */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.precio {
+  font-size: 18px;
+  font-weight: bold;
+  color: #00695c;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 15px;
+  background: #00796b;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #004d40;
+}
+
+/* Formulario de compra */
+.compra {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.qr {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.qr img {
+  width: 200px;
+  height: 200px;
+}
+
+/* Responsive: en pantallas menores de 600px, un solo producto por fila */
+@media (max-width: 600px) {
+  .productos {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,250 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Quiz Ciencias - Pregunta al azar (3 páginas)</title>
-  <style>
-    :root{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
-    body{margin:0;display:flex;min-height:100vh;align-items:center;justify-content:center;background:#f3f4f6}
-    .card{width:min(720px,96vw);background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.08);overflow:hidden}
-    header{padding:18px 22px;border-bottom:1px solid #eee}
-    header h1{margin:0;font-size:18px}
-    .container{height:520px;display:flex;flex-direction:column}
-    .page{flex:1;padding:18px 22px;overflow:auto}
-    .question{font-size:20px;margin-bottom:14px}
-    .options{display:flex;flex-direction:column;gap:8px}
-    .option{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;border:1px solid transparent}
-    .option input{width:18px;height:18px}
-    .controls{display:flex;gap:10px;padding:14px;border-top:1px solid #eee;align-items:center;justify-content:space-between}
-    .btn{background:#2563eb;color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
-    .btn[disabled]{opacity:.45;cursor:not-allowed}
-    .progress{display:flex;gap:6px;align-items:center}
-    .dot{width:12px;height:12px;border-radius:50%;background:#e5e7eb}
-    .dot.active{background:#2563eb}
-    .result{display:flex;align-items:center;gap:12px;font-size:18px}
-    .icon{width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px}
-    .icon.good{background:#ecfdf5;color:#059669}
-    .icon.bad{background:#fff1f2;color:#dc2626}
-    footer small{color:#6b7280}
-    /* scrollbar styling for modern browsers */
-    .page::-webkit-scrollbar{width:12px}
-    .page::-webkit-scrollbar-track{background:#f1f5f9;border-radius:8px}
-    .page::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px}
-    @media (max-width:420px){.card{border-radius:0}}
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Venta de Encurtidos</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="card" role="application" aria-label="Quiz de ciencias">
-    <header>
-      <h1>Quiz aleatorio — Ciencias (3 preguntas)</h1>
-    </header>
-    <div class="container">
-      <!-- Páginas dinámicas -->
-      <div id="page" class="page" tabindex="0">
-        <!-- contenido generado por JS -->
-      </div>
-      <div class="controls">
-        <div class="progress" aria-hidden="true">
-          <div id="dot0" class="dot"></div>
-          <div id="dot1" class="dot"></div>
-          <div id="dot2" class="dot"></div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button id="prevBtn" class="btn" disabled>Anterior</button>
-          <button id="nextBtn" class="btn">Siguiente</button>
-        </div>
-      </div>
+  <header>
+    <h1>Tienda de Encurtidos</h1>
+    <p>Los sabores tradicionales en tu mesa</p>
+  </header>
+
+  <main class="productos">
+    <div class="producto">
+      <img src="img/cebolla.jpg" alt="Cebolla encurtida">
+      <h2>Cebolla</h2>
+      <p class="precio">Bs. 15</p>
+      <a href="compra.html?producto=Cebolla&precio=15" class="btn">Comprar</a>
     </div>
-    <footer style="padding:10px 18px;border-top:1px solid #fafafa;display:flex;justify-content:space-between;align-items:center">
-      <small>Generado localmente — listo para subir a GitHub</small>
-      <small id="status"></small>
-    </footer>
-  </div>
 
-  <script>
-    // --------------------------------------
-    // DATOS: preguntas y respuestas (proporcionadas)
-    // --------------------------------------
-    const bank = [
-{q:"¿Cuál es la unidad básica de la materia que no puede ser dividida por medios químicos?", a:"El átomo."},
-{q:"¿Qué partícula subatómica tiene una carga eléctrica positiva y se encuentra en el núcleo del átomo?", a:"El protón."},
-{q:"¿Cómo se llama el proceso en el que un líquido se convierte en gas?", a:"Evaporación o vaporización."},
-{q:"¿Qué elemento químico es el componente principal del diamante y del grafito?", a:"Carbono (C)."},
-{q:"¿Qué tipo de enlace químico se forma cuando dos átomos no metálicos comparten electrones?", a:"Enlace covalente."},
-{q:"¿Cuál es el pH de una solución que se considera neutra?", a:"pH de 7."},
-{q:"¿Qué nombre recibe la sustancia que aumenta la velocidad de una reacción química sin consumirse en el proceso?", a:"Catalizador."},
-{q:"¿Qué ley de la química establece que la masa no se crea ni se destruye en una reacción química?", a:"Ley de conservación de la masa (Ley de Lavoisier)."},
-{q:"¿Cómo se llama la capa de electrones más externa de un átomo?", a:"Capa de valencia."},
-{q:"¿Qué tipo de mezcla tiene una composición uniforme en todas sus partes, como el agua salada?", a:"Mezcla homogénea o solución."},
-{q:"¿Qué proceso describe la conversión de un gas directamente a sólido, sin pasar por el estado líquido?", a:"Sublimación inversa o deposición."},
-{q:"¿Cómo se define un isótopo de un elemento?", a:"Son átomos del mismo elemento con el mismo número de protones, pero diferente número de neutrones."},
-{q:"¿Qué fuerza intermolecular es responsable de la alta tensión superficial del agua?", a:"Puentes de hidrógeno."},
-{q:"¿Qué es un ácido según la teoría de Brönsted-Lowry?", a:"Una sustancia que dona un protón (ion H+)."},
-{q:"En una reacción de oxidación-reducción (redox), ¿qué sucede con la sustancia que se oxida?", a:"Pierde electrones."},
-{q:"¿Qué principio establece que los electrones ocupan los orbitales de menor energía antes de pasar a los de mayor energía?", a:"Principio de Aufbau."},
-{q:"¿Qué nombre recibe una reacción que libera energía al entorno, generalmente en forma de calor?", a:"Reacción exotérmica."},
-{q:"¿Cuál es la función principal de los carbohidratos en los seres vivos?", a:"Proveer energía."},
-{q:"¿Qué es la entalpía de una reacción química?", a:"La cantidad de calor absorbido o liberado a presión constante."},
-{q:"¿Qué concepto describe la energía mínima necesaria para que una reacción química comience?", a:"Energía de activación."},
-{q:"¿Qué magnitud física mide la cantidad de materia en un objeto?", a:"La masa."},
-{q:"¿Qué ley de Newton afirma que un objeto en reposo permanece en reposo, y un objeto en movimiento permanece en movimiento con velocidad constante, a menos que una fuerza externa actúe sobre él?", a:"Primera Ley de Newton (Ley de la inercia)."},
-{q:"¿Cuál es la unidad de medida de la fuerza en el Sistema Internacional (SI)?", a:"El Newton (N)."},
-{q:"¿Qué fenómeno físico explica por qué un objeto flota o se hunde en un fluido?", a:"Principio de Arquímedes o flotabilidad."},
-{q:"¿Qué tipo de energía tiene un objeto debido a su movimiento?", a:"Energía cinética."},
-{q:"¿Qué concepto describe la velocidad de un objeto en una dirección específica?", a:"Velocidad vectorial."},
-{q:"¿Qué tipo de onda no necesita un medio material para propagarse, como la luz?", a:"Onda electromagnética."},
-{q:"¿Cómo se llama el fenómeno en el que la luz cambia de dirección al pasar de un medio a otro, como del aire al agua?", a:"Refracción."},
-{q:"¿Qué magnitud física se define como la fuerza por unidad de área?", a:"Presión."},
-{q:"¿Qué ley de la física relaciona la presión, el volumen y la temperatura de un gas ideal?", a:"Ley de los gases ideales."},
-{q:"¿Qué principio de la termodinámica establece que la energía no puede crearse ni destruirse, solo transformarse?", a:"Primera Ley de la Termodinámica (Principio de conservación de la energía)."},
-{q:"¿Qué efecto se produce cuando la frecuencia de una onda cambia debido al movimiento relativo entre la fuente de la onda y el observador?", a:"Efecto Doppler."},
-{q:"¿Cómo se llama la propiedad de los materiales que les permite oponerse al flujo de la corriente eléctrica?", a:"Resistencia eléctrica."},
-{q:"¿Qué ley de la gravitación universal establece que cada partícula del universo atrae a otra con una fuerza que es directamente proporcional al producto de sus masas e inversamente proporcional al cuadrado de la distancia entre sus centros?", a:"Ley de Gravitación Universal de Newton."},
-{q:"¿Qué fenómeno cuántico explica por qué los electrones de los átomos tienen niveles de energía discretos en lugar de un espectro continuo?", a:"Cuantización de la energía."},
-{q:"¿Qué es un superconductor?", a:"Un material que conduce la corriente eléctrica sin ninguna resistencia por debajo de una temperatura crítica."},
-{q:"¿Qué principio de la física establece que es imposible conocer simultáneamente y con precisión la posición y el momento lineal de una partícula?", a:"Principio de incertidumbre de Heisenberg."},
-{q:"¿Qué tipo de radiación electromagnética tiene la frecuencia más alta y la longitud de onda más corta?", a:"Rayos gamma."},
-{q:"¿Qué fenómeno óptico ocurre cuando las ondas de luz se superponen, produciendo patrones de interferencia?", a:"Interferencia."},
-{q:"¿Cómo se llama al proceso de convertir la energía radiante del sol directamente en energía eléctrica, como en los paneles solares?", a:"Efecto fotoeléctrico."}
-    ];
+    <div class="producto">
+      <img src="img/zanahoria.jpg" alt="Zanahoria encurtida">
+      <h2>Zanahoria</h2>
+      <p class="precio">Bs. 12</p>
+      <a href="compra.html?producto=Zanahoria&precio=12" class="btn">Comprar</a>
+    </div>
 
-    // --------------------------------------
-    // Utilidades
-    // --------------------------------------
-    function shuffle(arr){
-      for(let i=arr.length-1;i>0;i--){
-        const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];
-      }
-      return arr;
-    }
+    <div class="producto">
+      <img src="img/rabano.jpg" alt="R�bano encurtido">
+      <h2>R�bano</h2>
+      <p class="precio">Bs. 14</p>
+      <a href="compra.html?producto=R�bano&precio=14" class="btn">Comprar</a>
+    </div>
 
-    function pickNDistinctIndices(n, max){
-      const s=new Set();
-      while(s.size<n){
-        s.add(Math.floor(Math.random()*max));
-      }
-      return Array.from(s);
-    }
+    <div class="producto">
+      <img src="img/pepino.jpg" alt="Pepino encurtido">
+      <h2>Pepino</h2>
+      <p class="precio">Bs. 18</p>
+      <a href="compra.html?producto=Pepino&precio=18" class="btn">Comprar</a>
+    </div>
 
-    // --------------------------------------
-    // Selección aleatoria de 3 preguntas distintas
-    // --------------------------------------
-    const indices = pickNDistinctIndices(3, bank.length);
-    const questions = indices.map(i=>({...bank[i], idx:i}));
+    <div class="producto">
+      <img src="img/coliflor.jpg" alt="Coliflor encurtida">
+      <h2>Coliflor</h2>
+      <p class="precio">Bs. 20</p>
+      <a href="compra.html?producto=Coliflor&precio=20" class="btn">Comprar</a>
+    </div>
+  </main>
 
-    // Para cada pregunta generamos 3 opciones: la correcta y 2 distracciones sacadas de otras respuestas
-    const pages = questions.map(q=>{
-      // obtener otras respuestas
-      const others = bank.filter((_,i)=>i!==q.idx).map(x=>x.a);
-      shuffle(others);
-      const opts = [q.a, others[0], others[1]]; shuffle(opts);
-      return { question:q.q, correct:q.a, options:opts };
-    });
-
-    // estado
-    const answers = [null,null,null];
-    let pageIndex = 0;
-
-    // DOM
-    const pageEl = document.getElementById('page');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const status = document.getElementById('status');
-
-    function render(){
-      const p = pages[pageIndex];
-      pageEl.innerHTML = '';
-      const qEl = document.createElement('div'); qEl.className='question'; qEl.textContent = `Pregunta ${pageIndex+1} de 3: ${p.question}`;
-      pageEl.appendChild(qEl);
-
-      const opts = document.createElement('div'); opts.className='options';
-      p.options.forEach((opt,i)=>{
-        const label = document.createElement('label'); label.className='option';
-        const radio = document.createElement('input'); radio.type='radio'; radio.name='choice'; radio.value=opt; radio.id=`opt-${pageIndex}-${i}`;
-        if(answers[pageIndex]===opt) radio.checked=true;
-        radio.addEventListener('change',()=>{ answers[pageIndex]=opt; updateStatus(); });
-        const span = document.createElement('span'); span.textContent=opt;
-        label.appendChild(radio); label.appendChild(span);
-        opts.appendChild(label);
-      });
-      pageEl.appendChild(opts);
-
-      // ayuda: mostrar pequeña pista en la parte inferior (opcional)
-      const hint = document.createElement('div'); hint.style.marginTop='16px'; hint.style.color='#6b7280'; hint.style.fontSize='14px'; hint.textContent='Selecciona UNA opción y luego presiona Siguiente.';
-      pageEl.appendChild(hint);
-
-      // actualizar puntos
-      document.getElementById(`dot0`).classList.toggle('active', pageIndex===0);
-      document.getElementById(`dot1`).classList.toggle('active', pageIndex===1);
-      document.getElementById(`dot2`).classList.toggle('active', pageIndex===2);
-
-      prevBtn.disabled = pageIndex===0;
-      nextBtn.textContent = pageIndex===2 ? 'Terminar' : 'Siguiente';
-      updateStatus();
-    }
-
-    function updateStatus(){
-      const answeredCount = answers.filter(x=>x!==null).length;
-      status.textContent = `Respondidas: ${answeredCount}/3`;
-    }
-
-    prevBtn.addEventListener('click', ()=>{
-      if(pageIndex>0){ pageIndex--; render(); pageEl.focus(); }
-    });
-
-    nextBtn.addEventListener('click', ()=>{
-      if(pageIndex<2){
-        // require selection to advance
-        if(answers[pageIndex]===null){ alert('Por favor selecciona una opción antes de continuar.'); return; }
-        pageIndex++; render(); pageEl.focus();
-      } else {
-        // terminar
-        if(answers[pageIndex]===null){ alert('Por favor selecciona una opción antes de finalizar.'); return; }
-        showResult();
-      }
-    });
-
-    function showResult(){
-      // calcular correctas
-      const correctFlags = pages.map((p,i)=> p.correct === answers[i]);
-      const allCorrect = correctFlags.every(Boolean);
-
-      pageEl.innerHTML = '';
-      const resWrap = document.createElement('div'); resWrap.style.display='flex'; resWrap.style.flexDirection='column'; resWrap.style.alignItems='center'; resWrap.style.justifyContent='center'; resWrap.style.gap='18px';
-
-      const icon = document.createElement('div'); icon.className='icon '+(allCorrect? 'good' : 'bad');
-      icon.innerHTML = allCorrect ? '\n        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : '\n        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-
-      const title = document.createElement('div'); title.style.fontSize='20px'; title.style.fontWeight='600'; title.textContent = allCorrect ? '¡Excelente! Respondiste correctamente las 3 preguntas.' : 'Resultado: Al menos una respuesta es incorrecta.';
-
-      resWrap.appendChild(icon); resWrap.appendChild(title);
-
-      // detalle por pregunta
-      const detail = document.createElement('div'); detail.style.width='100%'; detail.style.maxWidth='680px';
-      pages.forEach((p,i)=>{
-        const block = document.createElement('div'); block.style.padding='10px 12px'; block.style.borderRadius='8px'; block.style.marginTop='10px'; block.style.border='1px solid #efefef';
-        const q=document.createElement('div'); q.style.fontWeight='600'; q.textContent = `Pregunta ${i+1}: ${p.question}`;
-        const your=document.createElement('div'); your.textContent = `Tu respuesta: ${answers[i]}`;
-        const corr=document.createElement('div'); corr.textContent = `Respuesta correcta: ${p.correct}`;
-        block.appendChild(q); block.appendChild(your); block.appendChild(corr);
-        detail.appendChild(block);
-      });
-
-      pageEl.appendChild(resWrap);
-      pageEl.appendChild(detail);
-
-      // botón reiniciar
-      const restart = document.createElement('button'); restart.className='btn'; restart.style.marginTop='18px'; restart.textContent='Reiniciar con nuevas preguntas';
-      restart.addEventListener('click', ()=> location.reload());
-      pageEl.appendChild(restart);
-
-      // mostrar en footer el resumen
-      document.getElementById('status').textContent = allCorrect ? 'Todas correctas' : 'Hay errores';
-    }
-
-    // render inicial
-    render();
-  </script>
+  <footer>
+    <p>&copy; 2025 Encurtidos Tradicionales - Bolivia</p>
+  </footer>
 </body>
 </html>
